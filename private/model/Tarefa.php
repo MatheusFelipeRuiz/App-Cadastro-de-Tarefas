@@ -7,9 +7,9 @@ class Tarefa
     private $dataCadastro;
 
 
-    public function __construct()
+    public function __construct($tarefa)
     {
-        
+        $this->__set('tarefa',$tarefa);        
     }
 
     public function __set($atributo,$valor){
