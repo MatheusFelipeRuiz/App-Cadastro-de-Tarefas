@@ -21,6 +21,10 @@ try {
         case 'recuperar':
             $tipoErro = 'recuperar';
             $tarefas = $tarefaService->recuperar();
+            break;
+        case 'recuperar-pendentes':
+            $tipoErro = 'recuperar-pendentes';
+            $tarefas = $tarefaService->recuperarPendentes();
     }
 } catch (PDOException $erro) {
     switch($tipoErro){
