@@ -82,7 +82,7 @@ require_once 'tarefa_controller.php';
 	<script>
 		function editar(idTarefa, descricaoTarefa){
 			const FORM = document.createElement('form');
-			FORM.setAttribute('action','#');
+			FORM.setAttribute('action','tarefa_controller.php?acao=atualizar');
 			FORM.setAttribute('method','post');
 
 			const INPUT_TAREFA = document.createElement('input');

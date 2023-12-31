@@ -59,6 +59,17 @@ class TarefaService
 
     public function atualizar()
     {
+        $query = 
+        'UPDATE
+            tb_tarefas
+        SET tarefa = :tarefa
+        WHERE id = :idTarefa
+        ';
+
+        $stmt = $this->conexao->prepare($query);
+        $stmt->bindValue(':tarefa',$this->tarefa->tarefa);
+        $stmt->bindValue(':idTarefa',$this->tarefa->id);
+        return $stmt->execute();
     }
 
     public function remover()

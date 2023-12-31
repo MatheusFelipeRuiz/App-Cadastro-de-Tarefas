@@ -5,9 +5,12 @@ require_once '../private/config/ConexaoBD.php';
 
 
 
-$conexao = new ConexaoBD();
 $descricao = strlen(trim($_POST['tarefa'])) > 0 ? $_POST['tarefa'] : null;
+$id = isset($_POST['id']) ? $_POST['id'] : null;
+
+$conexao = new ConexaoBD();
 $tarefa = new Tarefa($descricao);
+$tarefa->id = $id;
 $tarefaService = new TarefaService($conexao, $tarefa);
 
 $acao = isset($_GET['acao']) ? $_GET['acao'] : $acao;
@@ -25,6 +28,14 @@ try {
         case 'recuperar-pendentes':
             $tipoErro = 'recuperar-pendentes';
             $tarefas = $tarefaService->recuperarPendentes();
+            break;
+        case 'atualizar':
+            $tipoErro = 'atualizar';
+            $operacaoConcluida = $tarefaService->atualizar();
+            if($operacaoConcluida){
+                header('Location: todas_tarefas.php');
+            }
+
     }
 } catch (PDOException $erro) {
     switch($tipoErro){
