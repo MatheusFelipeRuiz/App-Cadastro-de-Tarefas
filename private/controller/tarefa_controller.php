@@ -5,17 +5,12 @@ require_once '../private/config/ConexaoBD.php';
 
 
 
-
+$conexao = new ConexaoBD();
 $descricao = strlen(trim($_POST['tarefa'])) > 0 ? $_POST['tarefa'] : null;
 $tarefa = new Tarefa($descricao);
-$conexao = new ConexaoBD();
 $tarefaService = new TarefaService($conexao, $tarefa);
 
-$acao = $_GET['acao'];
-echo '<pre>';
-var_dump($_GET);
-
-echo '</pre>';
+$acao = isset($_GET['acao']) ? $_GET['acao'] : $acao;
 $tipoErro = null;
 try {
     switch ($acao) {
@@ -23,6 +18,9 @@ try {
             $tipoErro = 'cadastro';
             $tarefaService->inserir();
             header('Location: nova_tarefa.php?cadastrado=1');
+        case 'recuperar':
+            $tipoErro = 'recuperar';
+            $tarefas = $tarefaService->recuperar();
     }
 } catch (PDOException $erro) {
     switch($tipoErro){
