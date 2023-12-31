@@ -24,7 +24,9 @@ class TarefaService
     {
         $query =
         'SELECT
+            tbt.id,
             tbt.tarefa,
+            tbs.status,
             tbt.data_cadastrado
         FROM
             tb_tarefas tbt

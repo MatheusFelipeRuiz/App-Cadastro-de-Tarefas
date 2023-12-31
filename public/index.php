@@ -42,41 +42,36 @@ require_once 'tarefa_controller.php';
 						<div class="col">
 							<h4>Tarefas pendentes</h4>
 							<hr />
-						<?php if($acao === 'recuperar-pendentes'){
-							foreach($tarefas as $tarefa => $valor){
-
-						?>
-							<div class="row mb-3 d-flex align-items-center tarefa">
-								<div class="col-sm-9"> 
-									<?php echo "$valor->tarefa"; ?> -
-									<?php
-										$data = date_create($valor->data_cadastrado);
-										echo date_format($data,'d/m/Y');
-									?>
+							<?php if ($acao === 'recuperar-pendentes') {
+								foreach ($tarefas as $chave => $tarefa) {
+							?>
+									<div class="row mb-3 d-flex align-items-center tarefa">
+										<div class="col-sm-9">
+											<?php echo "$tarefa->tarefa"; ?> -
+											<?php
+											$data = date_create($tarefa->data_cadastrado);
+											echo date_format($data, 'd/m/Y');
+											?>
+										</div>
+										<div class="col-sm-3 mt-2 d-flex justify-content-between">
+											<i class="fas fa-trash-alt fa-lg text-danger"></i>
+											<i class="fas fa-edit fa-lg text-info"></i>
+											<i class="fas fa-check-square fa-lg text-success"></i>
+										</div>
+									</div>
+								<?php }
+							} else {
+								?>
+								<div>
+									<h4 class="text-danger">Erro ao consultar tarefas</h4>
+									<p class="font-weight-bold">Por favor, entre em contato com o suporte para verificar se ocorreu algum problema.</p>
 								</div>
-								<div class="col-sm-3 mt-2 d-flex justify-content-between">
-									<i class="fas fa-trash-alt fa-lg text-danger"></i>
-									<i class="fas fa-edit fa-lg text-info"></i>
-									<i class="fas fa-check-square fa-lg text-success"></i>
-								</div>
-							</div>
-						<?php }
-							}
-						?>
-							<div class="row mb-3 d-flex align-items-center tarefa">
-								<div class="col-sm-9">Passear com o cachorro</div>
-								<div class="col-sm-3 mt-2 d-flex justify-content-between">
-									<i class="fas fa-trash-alt fa-lg text-danger"></i>
-									<i class="fas fa-edit fa-lg text-info"></i>
-									<i class="fas fa-check-square fa-lg text-success"></i>
-								</div>
-							</div>
+							<?php } ?>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 </body>
 
 </html>

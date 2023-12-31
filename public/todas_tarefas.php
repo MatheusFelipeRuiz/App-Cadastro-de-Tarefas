@@ -45,20 +45,22 @@ require_once 'tarefa_controller.php';
 								<hr />
 
 							<?php
-								foreach ($tarefas as $tarefa => $valor) {
+								foreach ($tarefas as $chave => $tarefa) {
 							?>
 									<div class="row mb-3 d-flex align-items-center tarefa">
-										<div class="col-sm-9"> 
-											<?php echo $valor->tarefa ?> -
-											<?php echo ucfirst($valor->status) ?> -
+										<div class="col-sm-9" id="tarefa-<?php echo $tarefa->id ?>"> 
+											<?php echo $tarefa->tarefa ?> -
+											<?php echo ucfirst($tarefa->status) ?> -
 											<?php 
-												$data = date_create($valor->data_cadastrado);
+												$data = date_create($tarefa->data_cadastrado);
 												echo date_format($data,'d/m/Y')
 											?>
 										</div>
 										<div class="col-sm-3 mt-2 d-flex justify-content-between">
 											<i class="fas fa-trash-alt fa-lg text-danger"></i>
-											<i class="fas fa-edit fa-lg text-info"></i>
+											<i class="fas fa-edit fa-lg text-info" 
+											onclick="editar(<?php echo $tarefa->id; ?>, '<?php echo $tarefa->tarefa;?>')">
+											</i>
 											<i class="fas fa-check-square fa-lg text-success"></i>
 										</div>
 									</div>
@@ -77,6 +79,39 @@ require_once 'tarefa_controller.php';
 			</div>
 		</div>
 	</div>
+	<script>
+		function editar(idTarefa, descricaoTarefa){
+			const FORM = document.createElement('form');
+			FORM.setAttribute('action','#');
+			FORM.setAttribute('method','post');
+
+			const INPUT_TAREFA = document.createElement('input');
+			INPUT_TAREFA.setAttribute('type','text');
+			INPUT_TAREFA.setAttribute('name','tarefa');
+			INPUT_TAREFA.setAttribute('class','form-control');
+			INPUT_TAREFA.value = descricaoTarefa;
+
+			const INPUT_ID_TAREFA = document.createElement('input');
+			INPUT_ID_TAREFA.setAttribute('type','hidden');
+			INPUT_ID_TAREFA.setAttribute('name','id');
+			INPUT_ID_TAREFA.value = idTarefa;
+
+			const BTN_SALVAR = document.createElement('button');
+			BTN_SALVAR.classList.add('btn', 'btn-info');
+			BTN_SALVAR.innerHTML = 'Atualizar';
+
+			FORM.appendChild(INPUT_TAREFA);
+			FORM.appendChild(BTN_SALVAR);
+			FORM.appendChild(INPUT_ID_TAREFA);
+
+			const TAREFA_SELECIONADA = document.getElementById(`tarefa-${idTarefa}`);
+
+			TAREFA_SELECIONADA.innerHTML = '';
+			TAREFA_SELECIONADA.insertBefore(FORM,TAREFA_SELECIONADA[0]);
+
+
+		}
+	</script>
 </body>
 
 </html>
