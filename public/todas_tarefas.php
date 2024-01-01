@@ -57,7 +57,9 @@ require_once 'tarefa_controller.php';
 											?>
 										</div>
 										<div class="col-sm-3 mt-2 d-flex justify-content-between">
-											<i class="fas fa-trash-alt fa-lg text-danger"></i>
+											<i class="fas fa-trash-alt fa-lg text-danger"
+											onclick="deletar(<?php echo $tarefa->id; ?>)">
+											</i>
 											<i class="fas fa-edit fa-lg text-info" 
 											onclick="editar(<?php echo $tarefa->id; ?>, '<?php echo $tarefa->tarefa;?>')">
 											</i>
@@ -109,7 +111,22 @@ require_once 'tarefa_controller.php';
 			TAREFA_SELECIONADA.innerHTML = '';
 			TAREFA_SELECIONADA.insertBefore(FORM,TAREFA_SELECIONADA[0]);
 
+		}
 
+		function deletar(idTarefa){
+			const FORM = document.createElement('form');
+			FORM.setAttribute('action','tarefa_controller.php?acao=remover');
+			FORM.setAttribute('method','post');
+
+			const INPUT_ID_TAREFA = document.createElement('input');
+			INPUT_ID_TAREFA.setAttribute('type','hidden');
+			INPUT_ID_TAREFA.setAttribute('name','id');
+			INPUT_ID_TAREFA.value = idTarefa;
+
+			FORM.appendChild(INPUT_ID_TAREFA);
+			const TAREFA_SELECIONADA = document.getElementById(`tarefa-${idTarefa}`);
+			TAREFA_SELECIONADA.appendChild(FORM);
+			FORM.submit();
 		}
 	</script>
 </body>

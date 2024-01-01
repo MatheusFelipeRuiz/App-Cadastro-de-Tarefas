@@ -35,6 +35,12 @@ try {
             if($operacaoConcluida){
                 header('Location: todas_tarefas.php');
             }
+            break;
+        case 'remover':
+            $tipoErro = 'remover';
+            $operacaoConcluida = $tarefaService->remover();
+            header('Location: todas_tarefas.php');
+            break;
 
     }
 } catch (PDOException $erro) {
