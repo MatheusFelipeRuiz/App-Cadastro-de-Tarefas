@@ -1,5 +1,7 @@
 <?php
-$_GET['acao'] = 'recuperar';
+if(!isset($_GET['acao']) && $_GET['acao'] !== 'concluir'){
+	$_GET['acao'] = 'recuperar';
+}
 require_once 'tarefa_controller.php';
 ?>
 <html>
@@ -63,7 +65,14 @@ require_once 'tarefa_controller.php';
 											<i class="fas fa-edit fa-lg text-info" 
 											onclick="editar(<?php echo $tarefa->id; ?>, '<?php echo $tarefa->tarefa;?>')">
 											</i>
-											<i class="fas fa-check-square fa-lg text-success"></i>
+										<?php 
+											if($tarefa->status !== 'realizado'){	
+										?>
+											<i class="fas fa-check-square fa-lg text-dark"
+											onclick="marcarComoConcluido(<?php echo $tarefa->id; ?>,'<?php echo $tarefa->tarefa; ?>')"></i>
+										<?php } else {?>
+											<i class="fas fa-check-square fa-lg text-success" ></i>
+										<?php }?>
 										</div>
 									</div>
 							<?php
@@ -127,6 +136,10 @@ require_once 'tarefa_controller.php';
 			const TAREFA_SELECIONADA = document.getElementById(`tarefa-${idTarefa}`);
 			TAREFA_SELECIONADA.appendChild(FORM);
 			FORM.submit();
+		}
+
+		function marcarComoConcluido(idTarefa,descricao){
+			window.location.href = `todas_tarefas.php?acao=concluir&id=${idTarefa}&descricao=${descricao}`;
 		}
 	</script>
 </body>
