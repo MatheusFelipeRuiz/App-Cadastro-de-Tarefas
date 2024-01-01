@@ -33,6 +33,7 @@ try {
             $tarefas = $tarefaService->recuperarPendentes();
             break;
         case 'atualizar':
+            
             $tipoErro = 'atualizar';
             $operacaoConcluida = $tarefaService->atualizar();
             if($operacaoConcluida){

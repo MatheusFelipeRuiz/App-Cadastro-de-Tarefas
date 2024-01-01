@@ -42,11 +42,12 @@ require_once 'tarefa_controller.php';
 						<div class="col">
 							<h4>Tarefas pendentes</h4>
 							<hr />
-							<?php if ($acao === 'recuperar-pendentes') {
-								foreach ($tarefas as $chave => $tarefa) {
+							<?php 
+								if ($acao === 'recuperar-pendentes') {
+									foreach ($tarefas as $chave => $tarefa) {
 							?>
 									<div class="row mb-3 d-flex align-items-center tarefa">
-										<div class="col-sm-9">
+										<div class="col-sm-9" id="tarefa-<?php echo $tarefa->id; ?>">
 											<?php echo "$tarefa->tarefa"; ?> -
 											<?php
 											$data = date_create($tarefa->data_cadastrado);
@@ -54,13 +55,30 @@ require_once 'tarefa_controller.php';
 											?>
 										</div>
 										<div class="col-sm-3 mt-2 d-flex justify-content-between">
-											<i class="fas fa-trash-alt fa-lg text-danger"></i>
-											<i class="fas fa-edit fa-lg text-info"></i>
-											<i class="fas fa-check-square fa-lg text-success"></i>
+											<i class="fas fa-trash-alt fa-lg text-danger"
+												onclick="deletar(<?php echo $tarefa->id; ?>)"
+											>
+
+											</i>
+											<i class="fas fa-edit fa-lg text-info"
+												onclick="editar(<?php echo $tarefa->id?>, '<?php echo $tarefa->tarefa ?>')" 
+											>
+
+											</i>
+										<?php 
+											if($tarefa->status !== 'realizado'){
+											
+											?>
+											<i class="fas fa-check-square fa-lg text-dar"
+											onclick="marcarComoConcluido(<?php echo $tarefa->id; ?>, '<?php  echo $tarefa->tarefa;?>')">
+											</i>
+										<?php }?>
 										</div>
 									</div>
-								<?php }
-							} else {
+							<?php 
+								}	
+									}
+								else {
 								?>
 								<div>
 									<h4 class="text-danger">Erro ao consultar tarefas</h4>
@@ -73,5 +91,57 @@ require_once 'tarefa_controller.php';
 			</div>
 		</div>
 </body>
+<script>
+	function editar(idTarefa, descricaoTarefa) {
+		const FORM = document.createElement('form');
+		FORM.setAttribute('action', 'tarefa_controller.php?acao=atualizar');
+		FORM.setAttribute('method', 'post');
+
+		const INPUT_TAREFA = document.createElement('input');
+		INPUT_TAREFA.setAttribute('type', 'text');
+		INPUT_TAREFA.setAttribute('name', 'tarefa');
+		INPUT_TAREFA.setAttribute('class', 'form-control');
+		INPUT_TAREFA.value = descricaoTarefa;
+
+		const INPUT_ID_TAREFA = document.createElement('input');
+		INPUT_ID_TAREFA.setAttribute('type', 'hidden');
+		INPUT_ID_TAREFA.setAttribute('name', 'id');
+		INPUT_ID_TAREFA.value = idTarefa;
+
+		const BTN_SALVAR = document.createElement('button');
+		BTN_SALVAR.classList.add('btn', 'btn-info');
+		BTN_SALVAR.innerHTML = 'Atualizar';
+
+		FORM.appendChild(INPUT_TAREFA);
+		FORM.appendChild(BTN_SALVAR);
+		FORM.appendChild(INPUT_ID_TAREFA);
+
+		const TAREFA_SELECIONADA = document.getElementById(`tarefa-${idTarefa}`);
+
+		TAREFA_SELECIONADA.innerHTML = '';
+		TAREFA_SELECIONADA.insertBefore(FORM, TAREFA_SELECIONADA[0]);
+
+	}
+
+	function deletar(idTarefa) {
+		const FORM = document.createElement('form');
+		FORM.setAttribute('action', 'tarefa_controller.php?acao=remover');
+		FORM.setAttribute('method', 'post');
+
+		const INPUT_ID_TAREFA = document.createElement('input');
+		INPUT_ID_TAREFA.setAttribute('type', 'hidden');
+		INPUT_ID_TAREFA.setAttribute('name', 'id');
+		INPUT_ID_TAREFA.value = idTarefa;
+
+		FORM.appendChild(INPUT_ID_TAREFA);
+		const TAREFA_SELECIONADA = document.getElementById(`tarefa-${idTarefa}`);
+		TAREFA_SELECIONADA.appendChild(FORM);
+		FORM.submit();
+	}
+
+	function marcarComoConcluido(idTarefa, descricao) {
+		window.location.href = `todas_tarefas.php?acao=concluir&id=${idTarefa}&descricao=${descricao}`;
+	}
+</script>
 
 </html>

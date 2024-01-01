@@ -41,6 +41,7 @@ class TarefaService
     public function recuperarPendentes(){
         $query =
         'SELECT
+            tbt.id,
 	        tbt.tarefa,
 	        tbs.status,
 	        tbt.data_cadastrado
