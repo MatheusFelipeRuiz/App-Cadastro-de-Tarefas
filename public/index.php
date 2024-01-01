@@ -94,7 +94,7 @@ require_once 'tarefa_controller.php';
 <script>
 	function editar(idTarefa, descricaoTarefa) {
 		const FORM = document.createElement('form');
-		FORM.setAttribute('action', 'tarefa_controller.php?acao=atualizar');
+		FORM.setAttribute('action', 'tarefa_controller.php?acao=atualizar&pagina=index');
 		FORM.setAttribute('method', 'post');
 
 		const INPUT_TAREFA = document.createElement('input');
@@ -125,7 +125,7 @@ require_once 'tarefa_controller.php';
 
 	function deletar(idTarefa) {
 		const FORM = document.createElement('form');
-		FORM.setAttribute('action', 'tarefa_controller.php?acao=remover');
+		FORM.setAttribute('action', 'tarefa_controller.php?acao=remover&pagina=index');
 		FORM.setAttribute('method', 'post');
 
 		const INPUT_ID_TAREFA = document.createElement('input');
@@ -140,7 +140,7 @@ require_once 'tarefa_controller.php';
 	}
 
 	function marcarComoConcluido(idTarefa, descricao) {
-		window.location.href = `todas_tarefas.php?acao=concluir&id=${idTarefa}&descricao=${descricao}`;
+		window.location.href = `todas_tarefas.php?acao=concluir&id=${idTarefa}&descricao=${descricao}&pagina=index`;
 	}
 </script>
 

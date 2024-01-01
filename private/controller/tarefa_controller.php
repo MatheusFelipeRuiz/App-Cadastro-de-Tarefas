@@ -5,6 +5,7 @@ require_once '../private/config/ConexaoBD.php';
 
 
 
+
 $descricao = strlen(trim($_POST['tarefa'])) > 0 ? $_POST['tarefa'] : $descricao;
 $descricao = isset($_GET['descricao']) ? $_GET['descricao'] : $descricao;
 $id = isset($_POST['id']) ? $_POST['id'] : null;
@@ -18,6 +19,19 @@ $tarefaService = new TarefaService($conexao, $tarefa);
 
 $acao = isset($_GET['acao']) ? $_GET['acao'] : $acao;
 $tipoErro = null;
+$pagina = isset($_GET['pagina']) ? $_GET['pagina'] : $pagina;
+
+function definirPaginaDestino($pagina){
+    switch ($pagina) {
+        case 'index':
+            header('Location: index.php');
+            break;
+        case 'todas-tarefas':
+            header('Location: todas_tarefas.php');
+            break;
+    }
+}
+
 try {
     switch ($acao) {
         case 'cadastrar':
@@ -33,29 +47,31 @@ try {
             $tarefas = $tarefaService->recuperarPendentes();
             break;
         case 'atualizar':
-            
+
+
             $tipoErro = 'atualizar';
             $operacaoConcluida = $tarefaService->atualizar();
-            if($operacaoConcluida){
-                header('Location: todas_tarefas.php');
+            if ($operacaoConcluida) {
+                definirPaginaDestino($pagina);
             }
             break;
         case 'remover':
             $tipoErro = 'remover';
             $operacaoConcluida = $tarefaService->remover();
-            header('Location: todas_tarefas.php');
+            definirPaginaDestino($pagina);
             break;
         case 'concluir':
             $tipoErro = 'concluir';
             $id = isset($_GET['id']) ? $_GET['id'] : null;
             $tarefa->idStatus = 2;
             $tarefa->id = $id;
-            $tarefaService = new TarefaService($conexao,$tarefa);
+            $tarefaService = new TarefaService($conexao, $tarefa);
             $tarefaService->atualizar();
-            header('Location: todas_tarefas.php');
+            definirPaginaDestino($pagina);
+            break;
     }
 } catch (PDOException $erro) {
-    switch($tipoErro){
+    switch ($tipoErro) {
         case 'cadastro':
             header('Location: nova_tarefa.php?cadastrado=0');
     }
