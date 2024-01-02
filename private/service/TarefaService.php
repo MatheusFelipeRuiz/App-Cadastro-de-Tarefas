@@ -12,6 +12,17 @@ class TarefaService
         $this->conexao = $conexao->conectar();
     }
 
+    public function __set($atributo,$valor){
+        switch($atributo){
+            case 'tarefa':
+                $this->$atributo = $valor;
+                break;
+            case 'conexao':
+                $this->$atributo = $valor;
+                break;
+        }
+    }
+
     public function inserir()
     {
         $query = 'INSERT INTO tb_tarefas (tarefa) VALUES (:tarefa)';
@@ -26,6 +37,7 @@ class TarefaService
         'SELECT
             tbt.id,
             tbt.tarefa,
+            tbt.id_status,
             tbs.status,
             tbt.data_cadastrado
         FROM
@@ -43,6 +55,7 @@ class TarefaService
         'SELECT
             tbt.id,
 	        tbt.tarefa,
+            tbt.id_status,
 	        tbs.status,
 	        tbt.data_cadastrado
         FROM

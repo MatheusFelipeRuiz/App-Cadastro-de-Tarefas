@@ -63,13 +63,13 @@ require_once 'tarefa_controller.php';
 											onclick="deletar(<?php echo $tarefa->id; ?>)">
 											</i>
 											<i class="fas fa-edit fa-lg text-info" 
-											onclick="editar(<?php echo $tarefa->id; ?>, '<?php echo $tarefa->tarefa;?>')">
+											onclick="editar(<?php echo $tarefa->id; ?>, '<?php echo $tarefa->tarefa;?>', <?php echo $tarefa->id_status; ?>)">
 											</i>
 										<?php 
 											if($tarefa->status !== 'realizado'){	
 										?>
 											<i class="fas fa-check-square fa-lg text-dark"
-											onclick="marcarComoConcluido(<?php echo $tarefa->id; ?>,'<?php echo $tarefa->tarefa; ?>')"></i>
+											onclick="marcarComoConcluido(<?php echo $tarefa->id; ?>,'<?php echo $tarefa->tarefa; ?>', <?php echo $tarefa->id_status;?>)"></i>
 										<?php } else {?>
 											<i class="fas fa-check-square fa-lg text-success" ></i>
 										<?php }?>
@@ -91,9 +91,11 @@ require_once 'tarefa_controller.php';
 		</div>
 	</div>
 	<script>
-		function editar(idTarefa, descricaoTarefa){
+		const PAGINA = 'todas-tarefas';
+		
+		function editar(idTarefa, descricaoTarefa,idStatus){
 			const FORM = document.createElement('form');
-			FORM.setAttribute('action','tarefa_controller.php?acao=atualizar');
+			FORM.setAttribute('action',`tarefa_controller.php?acao=atualizar&pagina=${PAGINA}`);
 			FORM.setAttribute('method','post');
 
 			const INPUT_TAREFA = document.createElement('input');
@@ -107,13 +109,27 @@ require_once 'tarefa_controller.php';
 			INPUT_ID_TAREFA.setAttribute('name','id');
 			INPUT_ID_TAREFA.value = idTarefa;
 
+			const INPUT_ID_STATUS = document.createElement('input');
+			INPUT_ID_STATUS.setAttribute('type','hidden');
+			INPUT_ID_STATUS.setAttribute('name','idStatus');
+			INPUT_ID_STATUS.value = idStatus;
+
+
 			const BTN_SALVAR = document.createElement('button');
 			BTN_SALVAR.classList.add('btn', 'btn-info');
 			BTN_SALVAR.innerHTML = 'Atualizar';
+			BTN_SALVAR.addEventListener('click', (event) => {
+				const TEXTO_ERRO = `Erro, é necessário preencher o campo editado!`
+				if(!INPUT_TAREFA.value || INPUT_TAREFA.value === TEXTO_ERRO){
+					event.preventDefault();
+					INPUT_TAREFA.value = TEXTO_ERRO;
+				}
+			});
 
 			FORM.appendChild(INPUT_TAREFA);
 			FORM.appendChild(BTN_SALVAR);
 			FORM.appendChild(INPUT_ID_TAREFA);
+			FORM.appendChild(INPUT_ID_STATUS);
 
 			const TAREFA_SELECIONADA = document.getElementById(`tarefa-${idTarefa}`);
 
@@ -124,7 +140,7 @@ require_once 'tarefa_controller.php';
 
 		function deletar(idTarefa){
 			const FORM = document.createElement('form');
-			FORM.setAttribute('action','tarefa_controller.php?acao=remover');
+			FORM.setAttribute('action',`tarefa_controller.php?acao=remover&pagina=${PAGINA}`);
 			FORM.setAttribute('method','post');
 
 			const INPUT_ID_TAREFA = document.createElement('input');
@@ -138,8 +154,8 @@ require_once 'tarefa_controller.php';
 			FORM.submit();
 		}
 
-		function marcarComoConcluido(idTarefa,descricao){
-			window.location.href = `todas_tarefas.php?acao=concluir&id=${idTarefa}&descricao=${descricao}`;
+		function marcarComoConcluido(idTarefa,descricao,idStatus){
+			window.location.href = `todas_tarefas.php?acao=concluir&id=${idTarefa}&descricao=${descricao}&pagina=${PAGINA}&idStatus=${idStatus}`;
 		}
 	</script>
 </body>
